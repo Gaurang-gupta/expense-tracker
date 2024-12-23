@@ -1,0 +1,116 @@
+{
+    "portfolio_recipe": {
+        "long_term": {
+            "Equity": "",
+            "Real_estate": "",
+            "Debt": "",
+            "Gold": "",
+            "Crypto": "",
+            "International": ""
+        },
+        "medium_term": {
+            "Equity": "",
+            "Real_estate": "",
+            "Debt": "",
+            "Gold": "",
+            "Crypto": "",
+            "International": ""
+        },
+        "short_term": {
+            "Equity": "",
+            "Real_estate": "",
+            "Debt": "",
+            "Gold": "",
+            "Crypto": "",
+            "International": ""
+        }
+    },
+    "income_and_expenses": {
+        "income": [
+            {
+                "type": "",
+                "amount": ""
+            }
+        ],
+        "expenses": [
+            {
+                "type": "",
+                "amount": ""
+            }
+        ]
+    },
+    "indian_stocks": [
+        {
+            "title": "",
+            "classification": "",
+            "Quantity": "",
+            "Price": ""
+        }
+    ],
+    "Equity_MFs": [
+        {
+            "title":"",
+            "nav": "",
+            "Quantity": "",
+            "Small_cap": "",
+            "Mid_cap": "",
+            "Large_cap": "",
+            "Cash": ""
+        }
+    ],
+    "Real_estate": [
+        {
+            "type": "",
+            "title": "",
+            "value": ""
+        }
+    ],
+    "International": {
+        "International_equity": [
+            {
+                "title": "",
+                "Quantity": "",
+                "buy_price": ""
+            }
+        ],
+        "RSU": [
+            {
+                "stock_name": "",
+                "buy_price(in_Rs)": ""
+            }
+        ]
+    },
+    "Insurance": [
+        {
+            "type": "",
+            "title": "",
+            "value": ""
+        }
+    ],
+    "Debt": [
+        {
+            "type": "",
+            "title": "",
+            "value": ""
+        }
+    ],
+    "Gold": [
+        {
+            "type": "",
+            "title": "",
+            "value": ""
+        }
+    ],
+    "Crypto": [
+        {
+            "title": "",
+            "value": ""
+        }
+    ],
+    "Liabilities": [
+        {
+            "title": "",
+            "value": ""
+        }
+    ]
+}
