@@ -8,7 +8,7 @@ function Home() {
   const { user } = useUser()
   return (
     <div>
-      { user ? <h1>Home</h1> : <HomePageIfNotLoggedIn/> }
+      { user ? <div>Home</div> : <HomePageIfNotLoggedIn/> }
     </div>
   )
 }
@@ -144,18 +144,22 @@ const HomePageIfNotLoggedIn: React.FC = () => {
             Whether you're saving for a big purchase, paying off debt, or simply want to spend smarter, ExpenseTracker Pro is your ultimate financial partner.
           </p>
           <div className="mt-8 flex flex-col md:flex-row justify-center gap-4">
-            <motion.button
-              className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
-              whileHover={{ scale: 1.1 }}
-            >
-              <Link to={"/sign-in"}>Log In</Link>
-            </motion.button>
-            <motion.button
-              className="bg-gray-100 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 border border-blue-600"
-              whileHover={{ scale: 1.1 }}
-            >
-              <Link to={"/sign-up"}>Sign Up</Link>
-            </motion.button>
+            <Link to={"/sign-in"}>
+              <motion.button
+                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                Log In
+              </motion.button>
+            </Link>
+            <Link to={"/sign-up"}>
+              <motion.button
+                className="bg-gray-100 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 border border-blue-600"
+                whileHover={{ scale: 1.05 }}
+              >
+                Sign Up
+              </motion.button>
+            </Link>
           </div>
         </AnimatedSection>
       </div>
