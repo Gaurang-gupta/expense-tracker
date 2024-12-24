@@ -21,7 +21,7 @@ import SignInPage from './Pages/SignInPage/SignInPage.tsx'
 import SignUpPage from './Pages/SignUpPage/SignUpPage.tsx'
 import ErrorPage from './Pages/ErrorPage/ErrorPage.tsx'
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
+const PUBLISHABLE_KEY = import.meta.env.VITE_PUBLIC_CLERK_PUBLISHABLE_KEY
 
 if (!PUBLISHABLE_KEY) {
   throw new Error("Missing Publishable Key")
