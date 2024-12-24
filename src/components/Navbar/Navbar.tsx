@@ -50,10 +50,7 @@ function Navbar() {
               "indian_stocks": [],
               "Equity_MFs": [],
               "Real_estate": [],
-              "International": {
-                "International_equity": [],
-                "RSU": []
-              },
+              "international": [],
               "Insurance": [],
               "Debt": [],
               "Gold": [],
