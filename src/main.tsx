@@ -33,12 +33,6 @@ createRoot(document.getElementById('root')!).render(
     <StrictMode>
       <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
         <Routes>
-          <Route 
-            path='*' 
-            element={
-              <ErrorPage/>
-            }
-          />
           <Route
             path='/sign-in'
             element={
@@ -102,6 +96,10 @@ createRoot(document.getElementById('root')!).render(
           <Route
             path='/liabilities'
             element={<App children={<Liabilities/>}/>}
+          />
+          <Route 
+            path='*' 
+            element={<ErrorPage/>}
           />
         </Routes>
       </ClerkProvider>
