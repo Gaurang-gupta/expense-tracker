@@ -1,6 +1,6 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ClerkProvider, SignedOut } from '@clerk/clerk-react'
+import { ClerkProvider } from '@clerk/clerk-react'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -42,17 +42,13 @@ createRoot(document.getElementById('root')!).render(
           <Route
             path='/sign-in'
             element={
-              <SignedOut>
-                <SignInPage/>
-              </SignedOut>
+              <SignInPage/>
             }
           />
           <Route
             path='/sign-up'
             element={
-              <SignedOut>
-                <SignUpPage/>
-              </SignedOut>
+              <SignUpPage/>
             }
           />
           <Route 
