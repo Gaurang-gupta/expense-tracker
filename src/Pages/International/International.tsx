@@ -149,7 +149,7 @@ function International() {
           <Dialog open={open} onOpenChange={setOpen}>
           <DialogTrigger onClick={() => setOpen(true)} className="w-full py-4 bg-[#f5edca] rounded-xl text-lg hover:bg-[#f5edab] border border-[#fff492] font-semibold">+ Add</DialogTrigger>
           <DialogContent>
-            <DialogTitle className="w-full text-2xl">Add Stocks</DialogTitle>
+            <DialogTitle className="w-full text-2xl">Add International Stocks</DialogTitle>
             <label htmlFor="classification"
             className="text-lg font-semibold text-gray-500"
             >Classification</label>
