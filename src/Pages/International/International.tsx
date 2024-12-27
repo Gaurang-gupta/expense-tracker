@@ -179,6 +179,9 @@ function International() {
         </div>
       </div>
 
+      <div className="text-2xl pt-4 font-semibold">
+        Current International Equity :
+      </div>
       {/* Stock Cards */}
       <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
         {stockData?.map(({title, classification, Price, Quantity}: {title: string, classification:string, Price: number, Quantity: number}, index) => (

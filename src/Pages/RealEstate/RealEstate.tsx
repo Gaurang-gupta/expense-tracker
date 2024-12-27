@@ -192,6 +192,10 @@ function RealEstate() {
         </div>
       </div>
 
+      <div className="text-2xl pt-4 font-semibold">
+        Current Real Estate : 
+      </div>
+
       {/* real estate cards */}
       <Accordion type="single" collapsible className="w-full grid xs:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
         <div>

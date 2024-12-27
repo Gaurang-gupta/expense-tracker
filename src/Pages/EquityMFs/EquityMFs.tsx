@@ -307,6 +307,9 @@ function EquityMFs() {
         </div>
       </div>
 
+      <div className="text-2xl pt-4 font-semibold">
+        Current Mutual Funds:
+      </div>
       {/* Mutual Fund cards */}
       <div className="grid xs:grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mt-6">
         {mutualFundData?.map(({title, nav, Quantity, Small_cap, Mid_cap, Large_cap, Cash}: {title: string;
