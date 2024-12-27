@@ -43,10 +43,8 @@ function Navbar() {
                   "International": ""
                 }
               },
-              "income_and_expenses": {
-                "income": [],
-                "expenses": []
-              },
+              "income": [],
+              "expense": [],
               "indian_stocks": [],
               "Equity_MFs": [],
               "Real_estate": [],
