@@ -29,7 +29,6 @@ const HomePageIfLoggedIn: React.FC = () => {
   const [debtTotal, setDebtTotal] = useState(0)
   const [goldTotal, setGoldTotal] = useState(0)
   const [cryptoTotal, setCryptoTotal] = useState(0)
-  const [liabilitiesTotal, setLiabilitiesTotal] = useState(0)
   const { user } = useUser()
 
   const handleTotalNetworth = async() => {
@@ -101,10 +100,9 @@ const HomePageIfLoggedIn: React.FC = () => {
             for(let i in userData?.Liabilities){
               liabilitiesTotal += userData?.Liabilities[i]?.price
             }
-            setLiabilitiesTotal(liabilitiesTotal)
 
-            setNetworthValue(stockTotal + mutualFundTotal + realEstateTotal + internationalTotal + insuranceTotal + debtTotal + goldTotal + cryptoTotal);
             setLiabilitiesValue(liabilitiesTotal)
+            setNetworthValue(stockTotal + mutualFundTotal + realEstateTotal + internationalTotal + insuranceTotal + debtTotal + goldTotal + cryptoTotal);
           } else {
               console.log("No stocks found.");
           }
