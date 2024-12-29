@@ -28,8 +28,7 @@
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
-    --radius: 0.5rem
-  ;
+    --radius: 0.5rem;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -37,7 +36,23 @@
     --sidebar-accent: 240 4.8% 95.9%;
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
-    --sidebar-ring: 217.2 91.2% 59.8%}
+    --sidebar-ring: 217.2 91.2% 59.8%;
+    --color-equity: #4caf50;         /* Green */
+    --color-real-estate: #2196f3;   /* Blue */
+    --color-international: #ff9800; /* Orange */
+    --color-debt: #f44336;          /* Red */
+    --color-insurance: #9c27b0;     /* Purple */
+    --color-crypto: #00bcd4;        /* Cyan */
+    --color-gold: #ffeb3b;          /* Yellow */
+
+    --chart-equity: 145, 63%, 50%;          /* HSL format */
+    --chart-real-estate: 207, 90%, 54%;     
+    --chart-international: 33, 90%, 50%;    
+    --chart-debt: 0, 75%, 50%;             
+    --chart-insurance: 290, 60%, 50%;      
+    --chart-crypto: 180, 72%, 45%;         
+    --chart-gold: 55, 95%, 63%;  
+  }
   .dark {
     --background: 20 14.3% 4.1%;
     --foreground: 60 9.1% 97.8%;

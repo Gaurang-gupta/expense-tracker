@@ -2,18 +2,309 @@ import { useUser } from "@clerk/clerk-react"
 import { Link } from "react-router"
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
-import { useEffect } from "react";
-
+import { useEffect, useState } from "react";
+import { Wallet, BriefcaseBusiness, ChevronRight } from "lucide-react";
+import { db } from "../../firebase"
+import { doc, getDoc } from "firebase/firestore";
+import ChartHelper from "@/components/ChartHelper/ChartHelper";
 function Home() {
   const { user } = useUser()
   return (
     <div>
-      { user ? <div>Home</div> : <HomePageIfNotLoggedIn/> }
+      { user ? <HomePageIfLoggedIn/> : <HomePageIfNotLoggedIn/> }
     </div>
   )
 }
 
 export default Home
+
+const HomePageIfLoggedIn: React.FC = () => {
+  const [liabilitiesValue, setLiabilitiesValue] = useState(0)
+  const [networthValue, setNetworthValue] = useState(0)
+  const [stockTotal, setStockTotal] = useState(0)
+  const [mutualFundTotal, setMutualFundTotal] = useState(0)
+  const [realEstateTotal, setRealEstateTotal] = useState(0)
+  const [internationalTotal, setInternationalTotal] = useState(0)
+  const [insuranceTotal, setInsuranceTotal] = useState(0)
+  const [debtTotal, setDebtTotal] = useState(0)
+  const [goldTotal, setGoldTotal] = useState(0)
+  const [cryptoTotal, setCryptoTotal] = useState(0)
+  const [liabilitiesTotal, setLiabilitiesTotal] = useState(0)
+  const { user } = useUser()
+
+  const handleTotalNetworth = async() => {
+    try {
+      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDoc = await getDoc(userDocRef);
+
+      if (userDoc.exists()) {
+          const userData = userDoc.data();
+          if (userData) {
+            // stocks
+            let stockTotal = 0
+            for(let i in userData?.indian_stocks){
+              stockTotal += userData?.indian_stocks[i]?.Quantity * userData?.indian_stocks[i]?.Price
+            }
+            setStockTotal(stockTotal)
+
+            // MFs
+            let mutualFundTotal = 0
+            for(let i in userData?.Equity_MFs){
+              mutualFundTotal += (userData?.Equity_MFs[i]?.Quantity * userData?.Equity_MFs[i]?.nav)
+            }
+            setMutualFundTotal(mutualFundTotal)
+
+            // Real_estate
+            let realEstateTotal = 0
+            for(let i in userData?.Real_estate){
+              realEstateTotal += Number(userData?.Real_estate[i]?.value)
+            }
+            setRealEstateTotal(realEstateTotal)
+
+            // international
+            let internationalTotal = 0
+            for(let i in userData?.international){
+              internationalTotal += userData?.international[i]?.Quantity * userData?.international[i]?.Price
+            }
+            setInternationalTotal(internationalTotal)
+
+            // insurance
+            let insuranceTotal = 0
+            for(let i in userData?.Insurance){
+              insuranceTotal += userData?.Insurance[i]?.amount
+            }
+            setInsuranceTotal(insuranceTotal)
+
+            // debt
+            let debtTotal = 0
+            for(let i in userData?.Debt){
+              debtTotal += userData?.Debt[i]?.amount
+            }
+            setDebtTotal(debtTotal)
+
+            // gold
+            let goldTotal = 0
+            for(let i in userData?.Gold){
+              goldTotal += userData?.Gold[i]?.amount
+            }
+            setGoldTotal(goldTotal)
+
+            // crypto
+            let cryptoTotal = 0
+            for(let i in userData?.Crypto){
+              cryptoTotal += userData?.Crypto[i]?.price
+            }
+            setCryptoTotal(cryptoTotal)
+
+            // liabilities
+            let liabilitiesTotal = 0
+            for(let i in userData?.Liabilities){
+              liabilitiesTotal += userData?.Liabilities[i]?.price
+            }
+            setLiabilitiesTotal(liabilitiesTotal)
+
+            setNetworthValue(stockTotal + mutualFundTotal + realEstateTotal + internationalTotal + insuranceTotal + debtTotal + goldTotal + cryptoTotal);
+            setLiabilitiesValue(liabilitiesTotal)
+          } else {
+              console.log("No stocks found.");
+          }
+      } else {
+          console.log("No such document!");
+      }
+    } catch (error) {
+        console.error("Error fetching document: ", error);
+    }
+  }
+
+  useEffect(() => {
+    handleTotalNetworth()
+  }, [user])
+ 
+  return (
+    <div className="max-w-6xl mx-auto p-5 pt-10">
+      <h1 className="text-3xl font-semibold">Home</h1>
+      <h1 className="text-4xl font-bold mt-10">Hi, {user?.fullName}!</h1>
+      <h2 className="text-2xl text-gray-500 mt-5 font-semibold">Here is your Financial Summary</h2>
+
+      <div className="grid grid-cols-2 gap-10 mt-4">
+        <div className="bg-white p-5 flex items-center rounded-lg">
+          <div className="shadow-bottom-right mr-5 rounded-lg">
+            <Wallet size={48} className="p-3"/>
+          </div>
+
+          <div>
+            <h2 className="text-xl text-gray-400 font-semibold">Networth</h2>
+            <h2 className="text-2xl font-semibold mt-1">
+            {new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(
+              networthValue
+            )}
+            </h2>
+          </div>
+        </div>
+
+        <div className="bg-white p-5 flex items-center rounded-lg">
+          <div className="shadow-bottom-right mr-5 rounded-lg">
+            <BriefcaseBusiness size={48} className="p-3"/>
+          </div>
+
+          <div>
+            <h2 className="text-xl text-gray-400 font-semibold">Liabilities</h2>
+            <h2 className="text-2xl font-semibold mt-1">
+            {new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(
+              liabilitiesValue
+            )}
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-7 text-2xl font-semibold">
+        <h1 className="mb-4">Current Investments:</h1>
+        <div className="grid grid-cols-2 gap-5">
+          {/* table */}
+          <div className="grid grid-cols-1 gap-3 h-[550px] overflow-y-scroll">
+            {/* equity */}
+            <div className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">Equity</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(stockTotal + mutualFundTotal)}</h3>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-2 mt-4">
+                <Link to={"/indian-stocks"} className="flex items-center justify-between mr-3">
+                  <div>
+                    <h4 className="text-sm text-gray-400">Indian Stocks</h4>
+                    <h4 className="text-lg">{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(stockTotal)}</h4>
+                  </div>
+                  <div>
+                    <ChevronRight/>
+                  </div>
+                </Link>
+
+                <Link to={"/equity-mfs"} className="flex items-center justify-between">
+                  <div>
+                    <h4 className="text-sm text-gray-400">MFs</h4>
+                    <h4 className="text-lg">{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(mutualFundTotal)}</h4>
+                  </div>
+                  <div>
+                    <ChevronRight/>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            {/* real-estate */}
+            <Link to={"/real-estate"} className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">Real Estate</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(realEstateTotal)}</h3>
+                  </div>
+                  <div>
+                    <ChevronRight />
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* international */}
+            <Link to={"/international"} className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">International</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(internationalTotal)}</h3>
+                  </div>
+                  <div>
+                    <ChevronRight />
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* debt */}
+            <Link to={"/debt"} className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">Debt</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(debtTotal)}</h3>
+                  </div>
+                  <div>
+                    <ChevronRight />
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* gold */}
+            <Link to={"/gold"} className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">Gold</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(goldTotal)}</h3>
+                  </div>
+                  <div>
+                    <ChevronRight />
+                  </div>
+                </div>
+              </div>
+            </Link>
+
+            {/* Crypto */}
+            <Link to={"/crypto"} className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">Crypto</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(cryptoTotal)}</h3>
+                  </div>
+                  <div>
+                    <ChevronRight />
+                  </div>
+                </div>
+              </div>
+            </Link>      
+
+            {/* Insurance */}
+            <Link to={"/insurance"} className="bg-white p-4 rounded-xl">
+              <div>
+                <div className="flex justify-between items-center">
+                  <div>
+                    <h2 className="text-lg text-gray-400">Insurance</h2>
+                    <h3>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(insuranceTotal)}</h3>
+                  </div>
+                  <div>
+                    <ChevronRight />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          </div>
+
+          {/* chart */}
+          <div className="rounded-lg grid grid-cols-1 gap-3">
+            <ChartHelper
+             equityTotal={stockTotal + mutualFundTotal}
+             realEstateTotal={realEstateTotal}
+             internationalTotal={internationalTotal}
+             insuranceTotal={insuranceTotal}
+             debtTotal={debtTotal}
+             goldTotal={goldTotal}
+             cryptoTotal={cryptoTotal}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 
 interface SectionProps {

@@ -7,6 +7,9 @@ export default {
   content: ["./index.html", "./src/**/*.{ts,tsx,js,jsx}"],
   theme: {
     extend: {
+      boxShadow: {
+        'bottom-right': '5px 5px 10px rgba(0, 0, 0, 0.8)', // Customize the offset, blur, and spread
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
@@ -16,6 +19,13 @@ export default {
         background: "hsl(var(--background))",
         foreground: "hsl(var(--foreground))",
         whitehsla: "hsl(var(--white-hsla))",
+        equity: 'hsl(var(--chart-equity))',
+        realEstate: 'hsl(var(--chart-real-estate))',
+        international: 'hsl(var(--chart-international))',
+        debt: 'hsl(var(--chart-debt))',
+        insurance: 'hsl(var(--chart-insurance))',
+        crypto: 'hsl(var(--chart-crypto))',
+        gold: 'hsl(var(--chart-gold))',
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",

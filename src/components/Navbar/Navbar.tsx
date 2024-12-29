@@ -16,32 +16,38 @@ function Navbar() {
 
         if (!userDoc.exists()) {
           await setDoc(userDocRef, 
-            { 
-              "portfolio_recipe": {
-                "long_term": {
-                  "Equity": "",
-                  "Real_estate": "",
-                  "Debt": "",
-                  "Gold": "",
-                  "Crypto": "",
-                  "International": ""
-                },
-                "medium_term": {
-                  "Equity": "",
-                  "Real_estate": "",
-                  "Debt": "",
-                  "Gold": "",
-                  "Crypto": "",
-                  "International": ""
-                },
-                "short_term": {
-                  "Equity": "",
-                  "Real_estate": "",
-                  "Debt": "",
-                  "Gold": "",
-                  "Crypto": "",
-                  "International": ""
-                }
+            {
+              "long_term": {
+                "Equity": 50,
+                "Real_estate": 10,
+                "Debt": 20,
+                "Gold": 10,
+                "Crypto": 5,
+                "International": 5
+              },
+              "medium_term": {
+                "Equity": 30,
+                "Real_estate": 0,
+                "Debt": 50,
+                "Gold": 20,
+                "Crypto": 0,
+                "International": 0
+              },
+              "short_term": {
+                "Equity": 0,
+                "Real_estate": 0,
+                "Debt": 100,
+                "Gold": 0,
+                "Crypto": 0,
+                "International": 0
+              },
+              "expected_returns": {
+                "Equity": 14,
+                "Real_estate": 8,
+                "Debt": 8,
+                "Gold": 10,
+                "Crypto": 20,
+                "International": 10
               },
               "income": [],
               "expense": [],
