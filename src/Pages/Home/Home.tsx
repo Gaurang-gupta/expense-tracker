@@ -124,7 +124,7 @@ const HomePageIfLoggedIn: React.FC = () => {
       <h1 className="text-4xl font-bold mt-10">Hi, {user?.fullName}!</h1>
       <h2 className="text-2xl text-gray-500 mt-5 font-semibold">Here is your Financial Summary</h2>
 
-      <div className="grid grid-cols-2 gap-10 mt-4">
+      <div className="grid xs:grid:cols-1 md:grid-cols-2 gap-10 mt-4">
         <div className="bg-white p-5 flex items-center rounded-lg">
           <div className="shadow-bottom-right mr-5 rounded-lg">
             <Wallet size={48} className="p-3"/>
@@ -158,7 +158,7 @@ const HomePageIfLoggedIn: React.FC = () => {
 
       <div className="mt-7 text-2xl font-semibold">
         <h1 className="mb-4">Current Investments:</h1>
-        <div className="grid grid-cols-2 gap-5">
+        <div className="grid xs:grid-cols-1 md:grid-cols-2 gap-5">
           {/* table */}
           <div className="grid grid-cols-1 gap-3 h-[550px] overflow-y-scroll">
             {/* equity */}
