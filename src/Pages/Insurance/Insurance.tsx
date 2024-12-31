@@ -196,7 +196,7 @@ function Insurance() {
             <label htmlFor="classification" className="text-lg font-semibold text-gray-500">Type</label>
             <select name="cars" id="classification" className="outline-none border border-black p-3 rounded-xl" required value={insuranceType} onChange={(e) => setInsuranceType(e?.target?.value)}>
               {insuranceOptions.map((insurance, key) => (
-                <option key={key} value={insurance}>{insurance}</option>
+                <option key={key} value={insurance} disabled={insurance === "Choose Category"}>{insurance}</option>
               ))}
             </select>
 

@@ -150,7 +150,7 @@ function RealEstate() {
                 <label htmlFor="classification" className="text-lg font-semibold text-gray-500 w-[95%]">Classification</label>
                 <select name="cars" id="classification" className="outline-none border border-black p-3 rounded-xl mt-4" required value={realEstateType} onChange={(e) => setRealEstateType(e?.target?.value)}>
                   {realEstateTypes.map((realEstate, key) => (
-                    <option key={key} value={realEstate}>{realEstate}</option>
+                    <option key={key} value={realEstate} disabled={realEstate === "Choose Category"}>{realEstate}</option>
                   ))}
                 </select>
                 <label 

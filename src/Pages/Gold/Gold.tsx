@@ -186,7 +186,7 @@ function Gold() {
               <label htmlFor="classification" className="text-lg font-semibold text-gray-500">Classification</label>
               <select name="golds" id="classification" className="outline-none border border-black p-3 rounded-xl" required value={goldType} onChange={(e) => setGoldType(e?.target?.value)}>
                 {goldTypes.map((gold, key) => (
-                  <option key={key} value={gold}>{gold}</option>
+                  <option key={key} value={gold} disabled={gold === "Choose Category"}>{gold}</option>
                 ))}
               </select>
 

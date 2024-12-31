@@ -323,7 +323,7 @@ function EquityMFs() {
               <div>{new Intl.NumberFormat('en-IN').format(Quantity)}</div>
             </div>
             <div className="text-lg flex justify-between items-center">
-              <div>Share Price:</div>
+              <div>NAV:</div>
               <div>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(nav)}</div>
             </div>
             <div className="text-lg flex justify-between items-center">

@@ -197,7 +197,7 @@ function Debt() {
               <label htmlFor="classification" className="text-lg font-semibold text-gray-500">Classification</label>
               <select name="debts" id="classification" className="outline-none border border-black p-3 rounded-xl" required value={debtType} onChange={(e) => setDebtType(e?.target?.value)}>
                 {debtTypes.map((debt, key) => (
-                  <option key={key} value={debt}>{debt}</option>
+                  <option key={key} value={debt} disabled={debt === "Choose Category"}>{debt}</option>
                 ))}
               </select>
 

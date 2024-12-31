@@ -6,10 +6,12 @@ import {
     SheetTrigger,
   } from "@/components/ui/sheet"
 import { Link } from "react-router"
+import { useState } from "react"
   
 function SidebarApp() {
+    const [open, setOpen] = useState(false)
   return (
-    <Sheet>
+    <Sheet open={open} onOpenChange={setOpen}>
         <SheetTrigger>
             <MenuIcon className="h-9 w-9"/>
         </SheetTrigger>
@@ -18,7 +20,7 @@ function SidebarApp() {
             <h1 className="text-xl pb-3 uppercase tracking-widest">Dashboard</h1>
             {
                 data.Dashboard.map((dash, index) => (
-                    <Link to={dash.path} key={index} className="flex w-full hover:bg-gray-200 p-3 rounded-3xl cursor-pointer items-center">
+                    <Link onClick={() => setOpen(false)} to={dash.path} key={index} className="flex w-full hover:bg-gray-200 p-3 rounded-3xl cursor-pointer items-center">
                         {<dash.icon className="bg-gray-200 h-10 w-10 p-2 rounded-lg mr-2"/>}
                         {dash.title}
                     </Link>
@@ -27,7 +29,7 @@ function SidebarApp() {
             <h1 className="text-xl pb-3 pt-6 uppercase tracking-widest">Assets & Liabilities</h1>
             {
                 data.Assets_and_Liabilities.map((a, index) => (
-                <Link to={a.path} key={index} className="flex w-full hover:bg-gray-200 p-3 rounded-3xl cursor-pointer items-center">
+                <Link onClick={() => setOpen(false)} to={a.path} key={index} className="flex w-full hover:bg-gray-200 p-3 rounded-3xl cursor-pointer items-center">
                     {<a.icon className="bg-gray-200 h-10 w-10 p-2 rounded-lg mr-2"/>}
                     {a.title}
                 </Link>

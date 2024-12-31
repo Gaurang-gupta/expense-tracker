@@ -155,7 +155,7 @@ function International() {
             >Classification</label>
             <select name="cars" id="classification" className="outline-none border border-black p-3 rounded-xl" required value={stockType} onChange={(e) => handleStockType(e?.target?.value)}>
               {internationalEquityOptions.map((intEq, key) => (
-                <option key={key} value={intEq}>{intEq}</option>
+                <option key={key} value={intEq} disabled={intEq === "Choose Category"}>{intEq}</option>
               ))}
             </select>
 
