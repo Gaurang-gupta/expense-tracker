@@ -435,7 +435,7 @@ const HomePageIfNotLoggedIn: React.FC = () => {
           <div className="mt-8 flex flex-col md:flex-row justify-center gap-4">
             <Link to={"/sign-in"}>
               <motion.button
-                className="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+                className="bg-blue-600 w-full text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
                 whileHover={{ scale: 1.05 }}
               >
                 Log In
@@ -443,7 +443,7 @@ const HomePageIfNotLoggedIn: React.FC = () => {
             </Link>
             <Link to={"/sign-up"}>
               <motion.button
-                className="bg-gray-100 text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 border border-blue-600"
+                className="bg-gray-100 w-full text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 border border-blue-600"
                 whileHover={{ scale: 1.05 }}
               >
                 Sign Up
