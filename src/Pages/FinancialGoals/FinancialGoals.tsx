@@ -9,7 +9,8 @@ function FinancialGoals() {
   const { user } = useUser()
   const [incomeTotal, setIncomeTotal] = useState(0)
   const [incomeData, setIncomeData] = useState([])
-
+  const [expenseData, setExpenseData] = useState([])
+  const [expenseTotal, setExpenseTotal] = useState(0)
   const handleIncomeTotal = (incomeData: Array<{
     title: string;
     amount: number;
@@ -19,7 +20,17 @@ function FinancialGoals() {
         total += incomeData[i]?.amount
     }
     setIncomeTotal(total)
-}
+  }
+  const handleExpensesTotal = (expenseData: Array<{
+    title: string;
+    amount: number;
+  }>) => {
+    let total = 0
+    for(let i in expenseData){
+        total += expenseData[i]?.amount
+    }
+    setExpenseTotal(total)
+  }
 
 const fetchIncomes = async() => {
     try {
@@ -28,8 +39,10 @@ const fetchIncomes = async() => {
       if (userDoc.exists()) {
         const userData = userDoc.data();
         if (userData) {
-          setIncomeData(userData?.income);
+          setIncomeData(userData?.income)
+          setExpenseData(userData?.expense)
           handleIncomeTotal(userData?.income)
+          handleExpensesTotal(userData?.expense)
         } else {
           console.log("No debts found.");
         }
@@ -44,6 +57,7 @@ const fetchIncomes = async() => {
   useEffect(() => {
     fetchIncomes()
     console.log(incomeData)
+    console.log(expenseData)
   },[user])
 
   return (
@@ -71,21 +85,21 @@ const fetchIncomes = async() => {
           <div className="flex justify-between py-3">
             <h1>Amount available to invest:</h1>
             <h2>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(
-                    incomeTotal
+                    incomeTotal - expenseTotal
                     )}</h2>
           </div>
 
           <div className="flex justify-between py-3 border-y-2">
             <h1>Total Monthly SIP:</h1>
             <h2>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(
-                    55000
+                    incomeTotal - expenseTotal
                     )}</h2>
           </div>
 
           <div className="flex justify-between py-3">
             <h1>Amount Left:</h1>
             <h2>{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(
-                    55000
+                    incomeTotal - expenseTotal
                     )}</h2>
           </div>
         </div> 
