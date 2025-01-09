@@ -11,7 +11,9 @@ function Home() {
   const { user } = useUser()
   return (
     <div>
-      { user ? <HomePageIfLoggedIn/> : <HomePageIfNotLoggedIn/> }
+      { user ? 
+      <HomePageIfLoggedIn/> 
+      : <HomePageIfNotLoggedIn/> }
     </div>
   )
 }
