@@ -20,6 +20,7 @@ import Liabilities from './Pages/Liabilities/Liabilities.tsx'
 import SignInPage from './Pages/SignInPage/SignInPage.tsx'
 import SignUpPage from './Pages/SignUpPage/SignUpPage.tsx'
 import ErrorPage from './Pages/ErrorPage/ErrorPage.tsx'
+import Tracker from './Pages/Tracker/Tracker.tsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -60,6 +61,10 @@ createRoot(document.getElementById('root')!).render(
           <Route
             path='/financial-goals'
             element={<App children={<FinancialGoals/>}/>}
+          />
+          <Route
+            path="/tracker"
+            element={<App children={<Tracker/>}/>}
           />
           <Route
             path='/indian-stocks'

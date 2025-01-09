@@ -11,7 +11,8 @@ import {
     IndianRupee,
     Cuboid,
     Bitcoin,
-    BriefcaseBusiness
+    BriefcaseBusiness,
+    ChartLine
 } from 'lucide-react';
 export const data : {
     Dashboard: Array<
@@ -46,6 +47,11 @@ export const data : {
             title: "Financial Goals",
             icon: Target,
             path: "/financial-goals"
+        },
+        {
+            title: "Tracker",
+            icon: ChartBar,
+            path: "/tracker"
         }
     ],
     Assets_and_Liabilities: [
@@ -56,7 +62,7 @@ export const data : {
         },
         {
             title: "Equity MFs",
-            icon: ChartBar,
+            icon: ChartLine,
             path: "/equity-mfs"
         },
         {

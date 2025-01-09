@@ -57,7 +57,8 @@ function Navbar() {
               "Debt": [],
               "Gold": [],
               "Crypto": [],
-              "Liabilities": []
+              "Liabilities": [],
+              "all_expenses": [],
             }
           );
         }
