@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar,Cell, BarChart, CartesianGrid, XAxis } from "recharts"
 import { useEffect, useState } from "react"
 import {
   Card,CardContent,CardDescription,CardFooter,CardHeader,CardTitle,
@@ -18,13 +18,64 @@ import {
 import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+type stringFunction = (arg: string) => void;
+type boolFunction = (arg: boolean) => void;
+
 function Tracker() {
     const [title, setTitle] = useState("")
     const [amount, setAmount] = useState(0)
     const [date, setDate] = useState("")
     const [open, setOpen] = useState(false)
     const [data, setData] = useState([])
+    const [years, setYears] = useState([])
+    const [year, setYear] = useState("")
+    const [total, setTotal] = useState(0)
     const { user } = useUser()
+
+    const getYears = (data: Array<{title: string, amount: number, date: string}>) => {
+      const temp: any = []
+      for(let i in data){
+        temp.push(data[i].date.substring(0, 4))
+      }
+      const toAdd: any = [...new Set(temp)]
+      setYears(toAdd)
+      console.log(toAdd)
+    }
+
+    const sumByMonth = (year: string, data: Array<{title: string, amount: number, date: string}>) => {
+      const temp = [
+        {month: "Jan", Amount: 0},
+        {month: "Feb", Amount: 0},
+        {month: "Mar", Amount: 0},
+        {month: "Apr", Amount: 0},
+        {month: "May", Amount: 0},
+        {month: "Jun", Amount: 0},
+        {month: "Jul", Amount: 0},
+        {month: "Aug", Amount: 0},
+        {month: "Sep", Amount: 0},
+        {month: "Oct", Amount: 0},
+        {month: "Nov", Amount: 0},
+        {month: "Dec", Amount: 0},
+      ];
+      for(let i in data){
+        if(data[i].date.substring(0, 4) === year){
+          const month = data[i].date.substring(5, 7);
+          if(month === "01") { temp[0].Amount += data[i].amount }
+          if(month === "02") { temp[1].Amount += data[i].amount }
+          if(month === "03") { temp[2].Amount += data[i].amount }
+          if(month === "04") { temp[3].Amount += data[i].amount }
+          if(month === "05") { temp[4].Amount += data[i].amount }
+          if(month === "06") { temp[5].Amount += data[i].amount }
+          if(month === "07") { temp[6].Amount += data[i].amount }
+          if(month === "08") { temp[7].Amount += data[i].amount }
+          if(month === "09") { temp[8].Amount += data[i].amount }
+          if(month === "10") { temp[9].Amount += data[i].amount }
+          if(month === "11") { temp[10].Amount += data[i].amount }
+          if(month === "12") { temp[11].Amount += data[i].amount }
+        }
+      }
+      return temp
+    }
 
     useEffect(() => {
         fetchData()
@@ -47,6 +98,16 @@ function Tracker() {
         }
     }
 
+    function compare( a: {title: string, amount: number, date: string}, 
+      b:{title: string, amount: number, date: string} ) {
+      if ( a.date < b.date ){
+        return 1;
+      }
+      if ( a.date > b.date ){
+        return -1;
+      }
+      return 0;
+    }
     const fetchData = async() => {
         try {
             const userDocRef = doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
@@ -54,10 +115,15 @@ function Tracker() {
             if (userDoc.exists()) {
                 const userData = userDoc.data();
                 if (userData) {
-                    
-                    setData(userData?.all_expenses);
+                  setData(userData?.all_expenses?.sort( compare ));
+                  getYears(userData?.all_expenses);
+                  let total = 0
+                  for(let i in userData?.expense){
+                      total += userData?.expense[i]?.amount
+                  }
+                  setTotal(total)
                 } else {
-                    console.log("No debts found.");
+                  console.log("No debts found.");
                 }
             } else {
                 console.log("No such document!");
@@ -84,7 +150,7 @@ function Tracker() {
         {/* charts */}
         <h1 className="text-3xl font-semibold">Tracker</h1>
         <div className="mt-5 mb-9">
-            <TrackerChart/>
+            <TrackerChart total={total} years={years} year={year} setYear={setYear} chartData={sumByMonth(year, data)}/>
         </div>
 
         {/* Add expenses */}
@@ -94,15 +160,15 @@ function Tracker() {
             </div>
             <div className="flex-[0.25]">
                 <TrackerDialog 
-                title={title} 
-                setTitle={setTitle}
-                amount={amount}
-                setAmount={setAmount}
-                date={date}
-                setDate={setDate}
-                handleSubmit={handleSubmit}
-                open={open}
-                setOpen={setOpen}
+                  title={title} 
+                  setTitle={setTitle}
+                  amount={amount}
+                  setAmount={setAmount}
+                  date={date}
+                  setDate={setDate}
+                  handleSubmit={handleSubmit}
+                  open={open}
+                  setOpen={setOpen}
                 />
             </div>
         </div>
@@ -129,7 +195,7 @@ function TrackerTable({ data }: { data: Array<{title: string, amount: number, da
                         <TableRow key={index}>
                             <TableCell className="font-medium">{dat?.date}</TableCell>
                             <TableCell>{dat?.title}</TableCell>
-                            <TableCell className="text-right">{dat?.amount}</TableCell>
+                            <TableCell className="text-right">{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(dat?.amount)}</TableCell>
                         </TableRow>
                     ))
                 }
@@ -138,7 +204,6 @@ function TrackerTable({ data }: { data: Array<{title: string, amount: number, da
     )
 }
 
-type boolFunction = (arg: boolean) => void;
 function TrackerDialog({open, setOpen, title, setTitle, amount, setAmount, date, setDate, handleSubmit}: { title: string, setTitle: Function, amount: number, setAmount: Function, date: string, setDate: Function, handleSubmit: Function, open: boolean, setOpen: boolFunction}) {
     
     return (
@@ -163,41 +228,30 @@ function TrackerDialog({open, setOpen, title, setTitle, amount, setAmount, date,
     )
 }
 
-function TrackerChart() {
-    const chartData = [
-        { month: "January", Amount: 186},
-        { month: "February", Amount: 305 },
-        { month: "March", Amount: 237 },
-        { month: "April", Amount: 73 },
-        { month: "May", Amount: 209 },
-        { month: "June", Amount: 214 },
-        { month: "January", Amount: 186},
-        { month: "February", Amount: 305 },
-        { month: "March", Amount: 237 },
-        { month: "April", Amount: 73 },
-        { month: "May", Amount: 209 },
-        { month: "June", Amount: 214 },
-      ]
-      const chartConfig = {
-        Amount: {
-          label: "Amount",
-          color: "hsl(var(--chart-1))",
-        }
-      } satisfies ChartConfig
+function TrackerChart({years, year, setYear, chartData, total}: {years: any[], year: string, setYear: stringFunction, chartData: any[], total: number}) {
+  const updatedChartData = chartData.map(obj => ({
+    ...obj, 
+    color: obj.Amount <= total ? "hsl(147, 50%, 47%)" : "hsl(0, 100%, 50%)"
+  }))
+  const chartConfig = {
+    Amount: {
+      label: "Amount",
+    }
+  } satisfies ChartConfig
   return (
     <Card>
       <CardHeader className="flex-row justify-between">
         <div>
             <CardTitle>Bar Chart</CardTitle>
-            <CardDescription>January - December 2024</CardDescription>
+            <CardDescription>January - December {year}</CardDescription>
         </div>
         <div>
-            <DropdownMenuTracker/>
+            <DropdownMenuTracker years={years} year={year} setYear={setYear}/>
         </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={chartData}>
+          <BarChart accessibilityLayer data={updatedChartData!}>
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="month"
@@ -210,7 +264,11 @@ function TrackerChart() {
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="Amount" fill="var(--color-Amount)" radius={4} />
+            <Bar dataKey="Amount" radius={4}>
+              {updatedChartData.map((entry: any, index: any) => (
+                <Cell key={`cell-${index}`} fill={entry.color} />
+              ))}
+            </Bar>
           </BarChart>
         </ChartContainer>
       </CardContent>
@@ -221,21 +279,19 @@ function TrackerChart() {
   )
 }
  
-function DropdownMenuTracker() {
-  const [year, setYear] = useState("2001")
- 
+function DropdownMenuTracker({years, year, setYear}: {years: any[], year: string, setYear: stringFunction}) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button variant="outline">{year === "" ? "year": year}</Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-15">
         <DropdownMenuLabel>Year</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuRadioGroup value={year} onValueChange={setYear}>
-          <DropdownMenuRadioItem value="2023">2023</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="2024">2024</DropdownMenuRadioItem>
-          <DropdownMenuRadioItem value="2025">2025</DropdownMenuRadioItem>
+          {years.map((y, index) => (
+            <DropdownMenuRadioItem key={index} value={y}>{y}</DropdownMenuRadioItem>
+          ))}
         </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
