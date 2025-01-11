@@ -18,7 +18,7 @@ import {
 import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
-import { Trash2, X } from "lucide-react"
+import { Trash2 } from "lucide-react"
 type stringFunction = (arg: string) => void;
 type boolFunction = (arg: boolean) => void;
 
