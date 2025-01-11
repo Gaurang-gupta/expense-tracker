@@ -1,4 +1,4 @@
-import { Bar,Cell, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar,Cell, BarChart, CartesianGrid, XAxis, YAxis } from "recharts"
 import { useEffect, useState } from "react"
 import {
   Card,CardContent,CardDescription,CardFooter,CardHeader,CardTitle,
@@ -18,6 +18,7 @@ import {
 import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { Trash2, X } from "lucide-react"
 type stringFunction = (arg: string) => void;
 type boolFunction = (arg: boolean) => void;
 
@@ -145,6 +146,20 @@ function Tracker() {
             setOpen(false)
         }
     }
+
+    const handleDeleteExpense = async(index: number) => {
+      const expenseRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+      let newExpenseData: never[] = []
+      for(let i in data){
+        if(i !== String(index)){
+          newExpenseData.push(data[i])
+        }
+      }
+      await updateDoc(expenseRef, {
+        all_expenses: newExpenseData
+      });
+      fetchData()
+    }
   return (
     <div className="max-w-6xl mx-auto px-5 py-10">
         {/* charts */}
@@ -174,34 +189,39 @@ function Tracker() {
         </div>
 
         {/* table */}
-        <TrackerTable data={data}/>
+        <TrackerTable data={data} handleDeleteExpense={handleDeleteExpense}/>
     </div>
   )
 }
 
-function TrackerTable({ data }: { data: Array<{title: string, amount: number, date: string}>}) {
-    return (
-        <Table>
-            <TableHeader>
-                <TableRow>
-                <TableHead className="w-[100px]">Date</TableHead>
-                <TableHead>Title</TableHead>
-                <TableHead className="text-right">Amount</TableHead>
-                </TableRow>
-            </TableHeader>
-            <TableBody>
-                {data.length>0 &&
-                    data?.map((dat, index) => (
-                        <TableRow key={index}>
-                            <TableCell className="font-medium">{dat?.date}</TableCell>
-                            <TableCell>{dat?.title}</TableCell>
-                            <TableCell className="text-right">{new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(dat?.amount)}</TableCell>
-                        </TableRow>
-                    ))
-                }
-            </TableBody>
-        </Table>
-    )
+function TrackerTable({ data, handleDeleteExpense }: { data: Array<{title: string, amount: number, date: string}>, handleDeleteExpense: Function}) {
+  return (
+    <Table className="xs:text-sm md:text-md mt-5">
+      <TableHeader>
+        <TableRow className="flex">
+          <TableHead className="xs:flex-[0.4] md:flex-[0.2]">Date</TableHead>
+          <TableHead className="xs:flex-[0.4] md:flex-[0.6]">Title</TableHead>
+          <TableHead className="flex-[0.2]">Amount</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody className="bg-gray-50">
+        {data.length>0 &&
+          data?.map((dat, index) => (
+            <TableRow key={index} className="flex">
+              <TableCell className="xs:flex-[0.4] md:flex-[0.2]">{dat?.date}</TableCell>
+              <TableCell className="xs:flex-[0.4] md:flex-[0.6]">{dat?.title}</TableCell>
+              <TableCell className="flex-[0.2] flex items-center justify-between">
+                <div>
+                  {new Intl.NumberFormat('en-IN', {currencyDisplay: "symbol", style: 'currency', currency: 'INR'}).format(dat?.amount)}
+                </div>
+                <div className="hover:cursor-pointer" onClick={() => handleDeleteExpense(index)}><Trash2 className="h-[15px]"/></div>
+              </TableCell>
+            </TableRow>
+          ))
+        }
+      </TableBody>
+    </Table>
+  )
 }
 
 function TrackerDialog({open, setOpen, title, setTitle, amount, setAmount, date, setDate, handleSubmit}: { title: string, setTitle: Function, amount: number, setAmount: Function, date: string, setDate: Function, handleSubmit: Function, open: boolean, setOpen: boolFunction}) {
@@ -240,31 +260,38 @@ function TrackerChart({years, year, setYear, chartData, total}: {years: any[], y
   } satisfies ChartConfig
   return (
     <Card>
-      <CardHeader className="flex-row justify-between">
+      <CardHeader className="flex-row justify-between items-center">
         <div>
             <CardTitle>Bar Chart</CardTitle>
-            <CardDescription>January - December {year}</CardDescription>
+            <CardDescription className="xs:hidden md:block">Jan - Dec {year}</CardDescription>
         </div>
         <div>
             <DropdownMenuTracker years={years} year={year} setYear={setYear}/>
         </div>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={chartConfig}>
-          <BarChart accessibilityLayer data={updatedChartData!}>
-            <CartesianGrid vertical={false} />
-            <XAxis
+        <ChartContainer className="h-[350px] w-full" config={chartConfig}>
+          <BarChart accessibilityLayer data={updatedChartData!} layout="vertical">
+            <CartesianGrid horizontal={false} />
+            <YAxis
               dataKey="month"
+              type="category"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
-              tickFormatter={(value) => value.slice(0, 3)}
+              tickFormatter={(value) => value}
+            />
+            <XAxis /* Use the X-axis for the numerical data */
+              type="number"
+              tickLine={false}
+              tickMargin={10}
+              axisLine={false}
             />
             <ChartTooltip
               cursor={false}
               content={<ChartTooltipContent indicator="dashed" />}
             />
-            <Bar dataKey="Amount" radius={4}>
+            <Bar dataKey="Amount" radius={2} barSize={10}>
               {updatedChartData.map((entry: any, index: any) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
