@@ -47,6 +47,7 @@ function EquityMFs() {
         const userData = userDoc.data();
         if (userData) {
           setMutualFundData(userData.Equity_MFs);
+          console.log(userData)
         } else {
           console.log("No stocks found.");
         }

@@ -8,7 +8,6 @@ import IncomeExpense from './Pages/IncomeExpense/IncomeExpense.tsx'
 import IndianStocks from './Pages/IndianStocks/IndianStocks.tsx'
 import Home from './Pages/Home/Home.tsx'
 import PortfolioRecipe from './Pages/PortfolioRecipe/PortfolioRecipe.tsx'
-import FinancialGoals from './Pages/FinancialGoals/FinancialGoals.tsx'
 import EquityMFs from './Pages/EquityMFs/EquityMFs.tsx'
 import RealEstate from './Pages/RealEstate/RealEstate.tsx'
 import International from './Pages/International/International.tsx'
@@ -21,6 +20,7 @@ import SignInPage from './Pages/SignInPage/SignInPage.tsx'
 import SignUpPage from './Pages/SignUpPage/SignUpPage.tsx'
 import ErrorPage from './Pages/ErrorPage/ErrorPage.tsx'
 import Tracker from './Pages/Tracker/Tracker.tsx'
+import ChatAI from './Pages/ChatAI/ChatAI.tsx'
 
 const PUBLISHABLE_KEY = import.meta.env.VITE_PUBLIC_CLERK_PUBLISHABLE_KEY
 
@@ -58,13 +58,17 @@ createRoot(document.getElementById('root')!).render(
             path="/income-expense" 
             element={<App children={<IncomeExpense/>}/>}
           />
-          <Route
+          {/* <Route
             path='/financial-goals'
             element={<App children={<FinancialGoals/>}/>}
-          />
+          /> */}
           <Route
             path="/tracker"
             element={<App children={<Tracker/>}/>}
+          />
+          <Route
+            path='/chat_with_ai'
+            element={<App children={<ChatAI/>}/>}
           />
           <Route
             path='/indian-stocks'

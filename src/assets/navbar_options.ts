@@ -2,7 +2,6 @@ import {
     Percent, 
     ChartPie,
     BadgeDollarSign,
-    Target,
     ChartCandlestick,
     ChartBar,
     Factory,
@@ -12,7 +11,8 @@ import {
     Cuboid,
     Bitcoin,
     BriefcaseBusiness,
-    ChartLine
+    ChartLine,
+    Bot
 } from 'lucide-react';
 export const data : {
     Dashboard: Array<
@@ -44,14 +44,14 @@ export const data : {
             path: "/income-expense"
         },
         {
-            title: "Financial Goals",
-            icon: Target,
-            path: "/financial-goals"
-        },
-        {
             title: "Tracker",
             icon: ChartBar,
             path: "/tracker"
+        },
+        {
+            title: "Chat with AI",
+            icon: Bot,
+            path: "/chat_with_ai"
         }
     ],
     Assets_and_Liabilities: [
