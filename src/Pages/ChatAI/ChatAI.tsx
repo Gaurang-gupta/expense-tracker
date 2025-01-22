@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { getUserEmail } from "@/utils/authStorage";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router";
 function ChatAI() {
     const API_URL = "https://api-inference.huggingface.co/models/facebook/blenderbot-400M-distill";
     const API_TOKEN = import.meta.env.VITE_API_TOKEN;
@@ -46,6 +48,13 @@ function ChatAI() {
 
         setInput(""); // Clear input field
     };
+
+    const user = getUserEmail()
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        if(user === null || user === "") navigate('/')
+    }, [user])
 
     return (
         <main className="max-w-6xl mx-auto p-5 pt-10">

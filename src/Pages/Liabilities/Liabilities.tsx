@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogTrigger, DialogTitle} from "@/components/u
 import { Pen, Trash2 } from "lucide-react"
 import { db } from "../../firebase"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { useUser } from "@clerk/clerk-react"
+import { getUserEmail } from "@/utils/authStorage";
 function Liabilities() {
   const [ open, setOpen ] = useState(false)
   const [ liabilityName, setLiabilityName ] = useState("")
@@ -11,7 +11,7 @@ function Liabilities() {
   const [ liabilitiesTotalPrice, setLiabilitiesTotalPrice ] = useState(0)
   const [ liabilityData, setLiabilityData ] = useState([])
 
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const handleLiabilityTotal = (liabilityData: Array<{
     title: string;
@@ -26,7 +26,7 @@ function Liabilities() {
 
   const fetchLiabilities = async() => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -44,7 +44,7 @@ function Liabilities() {
   }
 
   const handleDeleteLiability = async(index: number) => {
-    const stockRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const stockRef = doc(db, "users", user)
     let newLiabilityData: never[] = []
     for(let i in liabilityData){
       if(i !== String(index)){
@@ -77,7 +77,7 @@ function Liabilities() {
     liablitiyPrice: number, 
   ) => {
     try{
-      const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+      const docRef = doc(db, "users", user);
       await updateDoc(docRef, {
         Liabilities: arrayUnion(
         {

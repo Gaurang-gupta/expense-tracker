@@ -3,8 +3,8 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useEffect, useState } from "react"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore"
 import { db } from "../../firebase"
-import { useUser } from "@clerk/clerk-react"
 import { Pen, Trash2 } from "lucide-react"
+import { getUserEmail } from "@/utils/authStorage"
 function RealEstate() {
   const realEstateTypes = ["Choose Category", "Commercial Real Estate", "REITS", "Fractional Ownership"]
   const [open, setOpen] = useState(false)
@@ -14,7 +14,7 @@ function RealEstate() {
 
   const [realEstateData, setRealEstateData] = useState([])
   const [realEstateTotalPrice, setRealEstateTotalPrice] = useState(0)
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const handleRealEstateTotal = (realEstateData: Array<{
     type: string;
@@ -30,7 +30,7 @@ function RealEstate() {
 
   const fetchRealEstate = async () => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -53,7 +53,7 @@ function RealEstate() {
     realEstateValue: number
   ) => {
     try{
-      const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+      const docRef = doc(db, "users", user);
       await updateDoc(docRef, {
           Real_estate: arrayUnion(
               {
@@ -103,7 +103,7 @@ function RealEstate() {
   }
 
   const handleDeleteRealEstate = async(index: number) => {
-    const realEstateRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const realEstateRef = doc(db, "users", user)
     let newRealEstateData: never[] = []
     for(let i in realEstateData){
         if(i !== String(index)){

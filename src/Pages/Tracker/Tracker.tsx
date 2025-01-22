@@ -15,10 +15,10 @@ import {
 import {
     Table,TableBody,TableCell,TableHead,TableHeader,TableRow,
 } from "@/components/ui/table"
-import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, updateDoc, getDoc } from "firebase/firestore";
 import { db } from "../../firebase";
 import { Trash2 } from "lucide-react"
+import { getUserEmail } from "@/utils/authStorage"
 type stringFunction = (arg: string) => void;
 type boolFunction = (arg: boolean) => void;
 
@@ -31,7 +31,7 @@ function Tracker() {
     const [years, setYears] = useState([])
     const [year, setYear] = useState("")
     const [total, setTotal] = useState(0)
-    const { user } = useUser()
+    const user = getUserEmail()
 
     const getYears = (data: Array<{title: string, amount: number, date: string}>) => {
       const temp: any = []
@@ -84,7 +84,7 @@ function Tracker() {
 
     const addData = async(title: string, amount: number, date: string) => {
         try{
-            const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+            const docRef = doc(db, "users", user);
             await updateDoc(docRef, {
                 all_expenses: arrayUnion(
                     {
@@ -111,7 +111,7 @@ function Tracker() {
     }
     const fetchData = async() => {
         try {
-            const userDocRef = doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+            const userDocRef = doc(db, 'users', user);
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
                 const userData = userDoc.data();
@@ -148,7 +148,7 @@ function Tracker() {
     }
 
     const handleDeleteExpense = async(index: number) => {
-      const expenseRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+      const expenseRef = doc(db, "users", user)
       let newExpenseData: never[] = []
       for(let i in data){
         if(i !== String(index)){

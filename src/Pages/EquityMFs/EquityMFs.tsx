@@ -2,8 +2,8 @@ import { Dialog, DialogContent, DialogTrigger, DialogTitle } from "@/components/
 import { doc, updateDoc, arrayUnion, getDoc } from "firebase/firestore"
 import { db } from "../../firebase"
 import { useEffect, useState } from "react"
-import { useUser } from "@clerk/clerk-react"
 import { Pen, Trash2 } from "lucide-react"
+import { getUserEmail } from "@/utils/authStorage"
 function EquityMFs() {
   const [open, setOpen] = useState(false)
   const [mfTitle, setMFTitle] = useState("")
@@ -17,7 +17,7 @@ function EquityMFs() {
   const [mutualFundData, setMutualFundData] = useState([])
   const [mutualFundTotal, setMutualFundTotal] = useState(0)
 
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const handleMutualFundTotal = (mutualFundData: Array<{
     title: string;
@@ -41,7 +41,7 @@ function EquityMFs() {
 
   const fetchMutualFunds = async () => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -73,7 +73,7 @@ function EquityMFs() {
     mfCashPercentage: number
   ) => {
       try{
-          const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+          const docRef = doc(db, "users", user);
           await updateDoc(docRef, {
             Equity_MFs: arrayUnion(
               {
@@ -93,7 +93,7 @@ function EquityMFs() {
   }
 
   const handleDeleteMutualFund = async(index: number) => {
-    const stockRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const stockRef = doc(db, "users", user)
     let newMutualFundData: never[] = []
     for(let i in mutualFundData){
         if(i !== String(index)){

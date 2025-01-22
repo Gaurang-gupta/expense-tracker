@@ -1,11 +1,23 @@
-import { SignedIn, UserButton, useUser } from "@clerk/clerk-react";
 import Sidebar from "../SidebarApp/Sidebar"
 import { useEffect } from "react";
 import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from "../../firebase"
+import { useNavigate } from "react-router";
+import { getUserEmail, getDisplayName, getPhotoUrl, clearUserEmail, clearPhotoUrl, clearDisplayName } from "../../utils/authStorage";
 
 function Navbar() {
-  const {user} = useUser();
+  const user = getUserEmail()
+  const displayName = getDisplayName()
+  const photoUrl = getPhotoUrl()
+  const navigate = useNavigate()
+
+  const handleLogout = () => {
+    clearUserEmail()
+    clearPhotoUrl()
+    clearDisplayName()
+    navigate("/")
+  }
+
   useEffect(() => {
     const checkAndCreateUserCollections = async (email: string) => {
       try{
@@ -67,17 +79,15 @@ function Navbar() {
       }
     };
 
-    checkAndCreateUserCollections(user?.emailAddresses[0]?.emailAddress!)
+    checkAndCreateUserCollections(user)
   }, [user])
 
   return (
     <nav className="bg-gray-800 p-5 text-white flex justify-between items-center">
       {user ? <Sidebar/>: <h1 className="text-2xl font-bold flex-[0.5]">Expense Tracker</h1>}
-      {user && (<h1 className="text-lg font-semibold">{user?.firstName}'s Financial Report</h1>)}
-      <div>
-        <SignedIn>
-          <UserButton/>
-        </SignedIn>
+      {user && (<h1 className="text-lg font-semibold">{displayName}'s Financial Report</h1>)}
+      <div className="rounded-full">
+        <img className="rounded-full h-10 w-10" src={photoUrl} onClick={handleLogout} alt="user's photo icon"/>
       </div>
     </nav>
   )

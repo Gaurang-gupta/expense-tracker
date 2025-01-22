@@ -1,6 +1,5 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import { ClerkProvider } from '@clerk/clerk-react'
 import './index.css'
 import App from './App.tsx'
 import { BrowserRouter, Routes, Route } from "react-router";
@@ -22,17 +21,9 @@ import ErrorPage from './Pages/ErrorPage/ErrorPage.tsx'
 import Tracker from './Pages/Tracker/Tracker.tsx'
 import ChatAI from './Pages/ChatAI/ChatAI.tsx'
 
-const PUBLISHABLE_KEY = import.meta.env.VITE_PUBLIC_CLERK_PUBLISHABLE_KEY
-
-if (!PUBLISHABLE_KEY) {
-  throw new Error("Missing Publishable Key")
-}
-
-
 createRoot(document.getElementById('root')!).render(
   <BrowserRouter>
     <StrictMode>
-      <ClerkProvider publishableKey={PUBLISHABLE_KEY} afterSignOutUrl="/">
         <Routes>
           <Route
             path='/sign-in'
@@ -58,10 +49,6 @@ createRoot(document.getElementById('root')!).render(
             path="/income-expense" 
             element={<App children={<IncomeExpense/>}/>}
           />
-          {/* <Route
-            path='/financial-goals'
-            element={<App children={<FinancialGoals/>}/>}
-          /> */}
           <Route
             path="/tracker"
             element={<App children={<Tracker/>}/>}
@@ -111,7 +98,6 @@ createRoot(document.getElementById('root')!).render(
             element={<ErrorPage/>}
           />
         </Routes>
-      </ClerkProvider>
     </StrictMode>
   </BrowserRouter>
 )

@@ -4,9 +4,9 @@ import { Dialog,
   DialogTitle} from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
 import { Trash2, Pen } from "lucide-react"
-import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { getUserEmail } from "@/utils/authStorage";
 
 function International() {
   const internationalEquityOptions = ["Choose Category", "International", "RSU"]
@@ -18,7 +18,7 @@ function International() {
   const [stockData, setStockData] = useState([])
   const [stockTotalPrice, setStockTotalPrice] = useState(0)
 
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const handleStockTotal = (stockData: Array<{
     title: string;
@@ -35,7 +35,7 @@ function International() {
 
   const fetchStocks = async () => {
     try {
-        const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+        const userDocRef = await doc(db, 'users', user);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
             const userData = userDoc.data();
@@ -67,7 +67,7 @@ function International() {
     stockQuantity: number
   ) => {
       try{
-          const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+          const docRef = doc(db, "users", user);
           await updateDoc(docRef, {
               international: arrayUnion(
                   {
@@ -84,7 +84,7 @@ function International() {
   }
 
   const handleDeleteStock = async(index: number) => {
-    const stockRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const stockRef = doc(db, "users", user)
     let newStockData: never[] = []
     for(let i in stockData){
         if(i !== String(index)){

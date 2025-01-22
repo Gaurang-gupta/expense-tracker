@@ -6,7 +6,7 @@ import { Dialog,
 import { Trash2, Pen } from "lucide-react"
 import { db } from "../../firebase"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { useUser } from "@clerk/clerk-react";
+import { getUserEmail } from "@/utils/authStorage";
 
 interface goldCategoryEntries {
   title: string;
@@ -40,7 +40,7 @@ function Gold() {
   const [goldValue, setGoldValue] = useState(0)
   const [fetchedGoldData, setFetchedGoldData] = useState(initialFetchObjectsArray)
   const [goldData, setGoldData] = useState(initialDataObject)
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const dataStructureChange = () => {
     const newStucturedData: dataObject = {
@@ -82,7 +82,7 @@ function Gold() {
 
   const fetchGolds = async() => {
     try {
-      const userDocRef = doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -102,7 +102,7 @@ function Gold() {
 
   const addData = async(type: string, name: string, value: number) => {
     try{
-      const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+      const docRef = doc(db, "users", user);
       await updateDoc(docRef, {
         Gold: arrayUnion(
           {
@@ -145,7 +145,7 @@ function Gold() {
   }
 
   const handleDeleteGold = async (index: number) => {
-    const debtRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const debtRef = doc(db, "users", user)
     let newGoldData: fetchedData[] = []
     for(let i in fetchedGoldData){
       if(i !== String(index)){

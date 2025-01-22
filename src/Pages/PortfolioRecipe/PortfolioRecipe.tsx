@@ -8,12 +8,13 @@ import {
 import { useEffect, useState } from "react"
 import { db } from "../../firebase"
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { useUser } from "@clerk/clerk-react"
 
 import { Dialog,
   DialogContent,
   DialogTrigger,
   DialogTitle} from "@/components/ui/dialog"
+import { getUserEmail } from "@/utils/authStorage";
+import { useNavigate } from "react-router";
 
 type fetchedData = {
   Equity: number,
@@ -67,11 +68,12 @@ function PortfolioRecipe() {
   const [shortTermGold, setShortTermGold] = useState(0)
   const [shortTermCrypto, setShortTermCrypto] = useState(0)
   const [shortTermInternational, setShortTermInternational] = useState(0)
-  const { user } = useUser()
+  const user = getUserEmail()
+  const navigate = useNavigate()
 
   const fetchData = async() => {
     try {
-      const userDocRef = doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
           const userData = userDoc.data();
@@ -134,7 +136,7 @@ function PortfolioRecipe() {
     }
     else {
       try{
-        const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+        const docRef = doc(db, "users", user);
         await updateDoc(docRef, {
           expected_returns: 
           {
@@ -165,7 +167,7 @@ function PortfolioRecipe() {
     }
     else {
       try{
-        const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+        const docRef = doc(db, "users", user);
         await updateDoc(docRef, {
           long_term: 
           {
@@ -196,7 +198,7 @@ function PortfolioRecipe() {
     }
     else {
       try{
-        const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+        const docRef = doc(db, "users", user);
         await updateDoc(docRef, {
           medium_term: 
           {
@@ -227,7 +229,7 @@ function PortfolioRecipe() {
     }
     else {
       try{
-        const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+        const docRef = doc(db, "users", user);
         await updateDoc(docRef, {
           short_term: 
           {
@@ -248,6 +250,7 @@ function PortfolioRecipe() {
   }
  
   useEffect(() => {
+    if(user === null || user === "") navigate("/")
     fetchData()
   }, [user])
 

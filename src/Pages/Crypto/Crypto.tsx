@@ -3,7 +3,7 @@ import {Dialog,DialogContent,DialogTrigger,DialogTitle} from "@/components/ui/di
 import { Pen, Trash2 } from "lucide-react"
 import { db } from "../../firebase"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { useUser } from "@clerk/clerk-react"
+import { getUserEmail } from "@/utils/authStorage";
 
 function Crypto() {
   const [open, setOpen] = useState(false)
@@ -12,7 +12,7 @@ function Crypto() {
   const [cryptoPrice, setCryptoPrice] = useState(0)
   const [cryptoData, setCryptoData] = useState([])
 
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const handleCryptoTotal = (cryptoData: Array<{
     title: string;
@@ -27,7 +27,7 @@ function Crypto() {
 
   const fetchCrypto = async () => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -57,7 +57,7 @@ function Crypto() {
     cryptoPrice: number, 
   ) => {
     try{
-      const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+      const docRef = doc(db, "users", user);
       await updateDoc(docRef, {
         Crypto: arrayUnion(
         {
@@ -88,7 +88,7 @@ function Crypto() {
   }
 
   const handleDeleteCrypto = async(index: number) => {
-    const stockRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const stockRef = doc(db, "users", user)
     let newCryptoData: never[] = []
     for(let i in cryptoData){
         if(i !== String(index)){

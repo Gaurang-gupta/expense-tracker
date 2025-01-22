@@ -1,8 +1,9 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from 'firebase/firestore';
+
 const firebaseConfig = {
-  apiKey: "AIzaSyDDKN_sZkB3b54RC96evsBQbn7HboNunkc",
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: "expense-tracker-a697e.firebaseapp.com",
   projectId: "expense-tracker-a697e",
   storageBucket: "expense-tracker-a697e.firebasestorage.app",
@@ -15,5 +16,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app)
 const db = getFirestore(app);
+const googleProvider = new GoogleAuthProvider();
 
-export { auth, db }
+export { auth, db, googleProvider }

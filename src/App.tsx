@@ -1,11 +1,12 @@
 import { ReactNode } from 'react'
 import './App.css'
 import Navbar from './components/Navbar/Navbar'
-import { useUser } from '@clerk/clerk-react'
+// import { useUser } from '@clerk/clerk-react'
 import Home from './Pages/Home/Home'
+import { getUserEmail } from "./utils/authStorage";
 
 function App({ children }: { children: ReactNode}) {
-  const { user } = useUser()
+  const user = getUserEmail()
   return (
     user ?
     <div>

@@ -1,4 +1,4 @@
-import { useUser } from "@clerk/clerk-react"
+// import { useUser } from "@clerk/clerk-react"
 import { Link } from "react-router"
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
@@ -7,8 +7,12 @@ import { Wallet, BriefcaseBusiness, ChevronRight } from "lucide-react";
 import { db } from "../../firebase"
 import { doc, getDoc } from "firebase/firestore";
 import ChartHelper from "@/components/ChartHelper/ChartHelper";
+import { getUserEmail, getDisplayName } from "../../utils/authStorage";
+import { useNavigate } from "react-router";
 function Home() {
-  const { user } = useUser()
+  const user = getUserEmail()
+  const navigate = useNavigate()
+  navigate(0)
   return (
     <div>
       { user ? 
@@ -31,11 +35,12 @@ const HomePageIfLoggedIn: React.FC = () => {
   const [debtTotal, setDebtTotal] = useState(0)
   const [goldTotal, setGoldTotal] = useState(0)
   const [cryptoTotal, setCryptoTotal] = useState(0)
-  const { user } = useUser()
+  const user = getUserEmail()
+  const displayName = getDisplayName()
 
   const handleTotalNetworth = async() => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
 
       if (userDoc.exists()) {
@@ -123,7 +128,7 @@ const HomePageIfLoggedIn: React.FC = () => {
   return (
     <div className="max-w-6xl mx-auto p-5 pt-10">
       <h1 className="text-3xl font-semibold">Home</h1>
-      <h1 className="text-4xl font-bold mt-10">Hi, {user?.fullName}!</h1>
+      <h1 className="text-4xl font-bold mt-10">Hi, {displayName}!</h1>
       <h2 className="text-2xl text-gray-500 mt-5 font-semibold">Here is your Financial Summary</h2>
 
       <div className="grid xs:grid:cols-1 md:grid-cols-2 gap-10 mt-4">

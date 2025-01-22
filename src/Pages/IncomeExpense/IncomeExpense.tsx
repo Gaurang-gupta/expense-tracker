@@ -4,9 +4,9 @@ import { Dialog,
     DialogTitle} from "@/components/ui/dialog"
 import { useState, useEffect } from "react"
 import { Trash2, Pen } from "lucide-react"
-import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { getUserEmail } from "@/utils/authStorage";
 function IncomeExpense() {
   return (
     <div className="max-w-6xl mx-auto p-5 pt-10">
@@ -30,7 +30,7 @@ const Expenses = () => {
     const [expensePrice, setExpensePrice] = useState(0)
     const [expenseTotal, setExpenseTotal] = useState(0)
     const [expenseData, setExpenseData] = useState([])
-    const { user } = useUser()
+    const user = getUserEmail()
     const handleExpensesTotal = (expenseData: Array<{
         title: string;
         amount: number;
@@ -44,7 +44,7 @@ const Expenses = () => {
 
     const fetchExpenses = async() => {
         try {
-            const userDocRef = doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+            const userDocRef = doc(db, 'users', user);
             const userDoc = await getDoc(userDocRef);
             if (userDoc.exists()) {
               const userData = userDoc.data();
@@ -62,7 +62,7 @@ const Expenses = () => {
     }
     const addData = async(expenseType: string, expensePrice: number) => {
         try{
-            const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+            const docRef = doc(db, "users", user);
             await updateDoc(docRef, {
                 expense: arrayUnion(
                     {
@@ -99,7 +99,7 @@ const Expenses = () => {
     }
 
     const handleDeleteExpense = async(index: number) => {
-        const expenseRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+        const expenseRef = doc(db, "users", user)
         let newExpenseData: never[] = []
         for(let i in expenseData){
             if(i !== String(index)){
@@ -169,7 +169,7 @@ const Income = () => {
     const [incomePrice, setIncomePrice] = useState(0)
     const [incomeTotal, setIncomeTotal] = useState(0)
     const [incomeData, setIncomeData] = useState([])
-    const { user } = useUser()
+    const user = getUserEmail()
 
     const handleIncomeTotal = (incomeData: Array<{
         title: string;
@@ -184,7 +184,7 @@ const Income = () => {
 
     const fetchIncomes = async() => {
         try {
-          const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+          const userDocRef = await doc(db, 'users', user);
           const userDoc = await getDoc(userDocRef);
           if (userDoc.exists()) {
             const userData = userDoc.data();
@@ -203,7 +203,7 @@ const Income = () => {
 
     const addData = async(incomeType: string, incomePrice: number) => {
         try{
-            const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+            const docRef = doc(db, "users", user);
             await updateDoc(docRef, {
                 income: arrayUnion(
                     {
@@ -240,7 +240,7 @@ const Income = () => {
     }
 
     const handleDeleteIncome = async(index: number) => {
-        const stockRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+        const stockRef = doc(db, "users", user)
         let newIncomeData: never[] = []
         for(let i in incomeData){
             if(i !== String(index)){

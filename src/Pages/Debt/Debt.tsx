@@ -6,7 +6,7 @@ import { ReactNode, useEffect, useState } from "react"
 import { Pen, Trash2 } from "lucide-react"
 import { db } from "../../firebase"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
-import { useUser } from "@clerk/clerk-react";
+import { getUserEmail } from "@/utils/authStorage";
 
 interface debtCategoryEntries {
   title: string;
@@ -42,7 +42,7 @@ function Debt() {
   const [fetchedDebtData, setFetchedDebtData] = useState(initialFetchObjectsArray)
   const [debtData, setDebtData] = useState(initialDataObject)
   const [debtTotalPrice, setDebtTotalPrice] = useState(0)
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const dataStructureChange = () => {
     const newStucturedData: dataObject = {
@@ -94,7 +94,7 @@ function Debt() {
 
   const fetchDebts = async() => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -114,7 +114,7 @@ function Debt() {
 
   const addData = async(type: string, name: string, value: number) => {
     try{
-      const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+      const docRef = doc(db, "users", user);
       await updateDoc(docRef, {
         Debt: arrayUnion(
           {
@@ -156,7 +156,7 @@ function Debt() {
   }
 
   const handleDeleteDebt = async (index: number) => {
-    const debtRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const debtRef = doc(db, "users", user)
     let newdebtData: fetchedData[] = []
     for(let i in fetchedDebtData){
       if(i !== String(index)){

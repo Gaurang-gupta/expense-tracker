@@ -4,9 +4,9 @@ import { Dialog,
   DialogTitle} from "@/components/ui/dialog"
 import { useState, useEffect, ReactNode } from "react"
 import { Trash2, Pen } from "lucide-react"
-import { useUser } from "@clerk/clerk-react"
 import { arrayUnion, doc, getDoc, updateDoc } from "firebase/firestore";
 import { db } from "../../firebase";
+import { getUserEmail } from "@/utils/authStorage";
 
 interface insuranceCategoryEntries {
   title: string;
@@ -42,7 +42,7 @@ function Insurance() {
   const [insuranceData, setInsuranceData] = useState(initialDataObject)
   const [insuranceTotalPrice, setInsuranceTotalPrice ] = useState(0)
 
-  const { user } = useUser()
+  const user = getUserEmail()
 
   const dataStructureChange = () => {
     const newStucturedData: dataObject = {
@@ -77,7 +77,7 @@ function Insurance() {
 
   const fetchInsurances = async() => {
     try {
-      const userDocRef = await doc(db, 'users', user?.emailAddresses[0]?.emailAddress!);
+      const userDocRef = await doc(db, 'users', user);
       const userDoc = await getDoc(userDocRef);
       if (userDoc.exists()) {
         const userData = userDoc.data();
@@ -97,7 +97,7 @@ function Insurance() {
 
   const addData = async(type: string, name: string, value: number) => {
     try{
-      const docRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!);
+      const docRef = doc(db, "users", user);
       await updateDoc(docRef, {
         Insurance: arrayUnion(
           {
@@ -152,7 +152,7 @@ function Insurance() {
   }
 
   const handleDeleteInsurance = async(index: number) => {
-    const debtRef = doc(db, "users", user?.emailAddresses[0]?.emailAddress!)
+    const debtRef = doc(db, "users", user)
     let newInsuranceData: fetchedData[] = []
     for(let i in fetchedInsuranceData){
       if(i !== String(index)){
