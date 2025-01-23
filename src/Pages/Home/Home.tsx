@@ -373,6 +373,34 @@ const HomePageIfNotLoggedIn: React.FC = () => {
           </motion.p>
         </header>
 
+        {/* Call to Action Section */}
+        <AnimatedSection className="py-12 text-center">
+          <h3 className="text-2xl font-bold">
+            Join Thousands Who’ve Taken Control of Their Finances
+          </h3>
+          <p className="mt-4 text-gray-600">
+            Whether you're saving for a big purchase, paying off debt, or simply want to spend smarter, ExpenseTracker Pro is your ultimate financial partner.
+          </p>
+          <div className="mt-8 flex flex-col md:flex-row justify-center gap-4">
+            <Link to={"/sign-in"}>
+              <motion.button
+                className="bg-blue-600 w-full text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
+                whileHover={{ scale: 1.05 }}
+              >
+                Log In
+              </motion.button>
+            </Link>
+            <Link to={"/sign-up"}>
+              <motion.button
+                className="bg-gray-100 w-full text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 border border-blue-600"
+                whileHover={{ scale: 1.05 }}
+              >
+                Sign Up
+              </motion.button>
+            </Link>
+          </div>
+        </AnimatedSection>
+
         {/* Highlight Section */}
         <AnimatedSection className="text-center py-8">
           <h2 className="text-3xl font-semibold">Track. Save. Prosper.</h2>
@@ -431,33 +459,7 @@ const HomePageIfNotLoggedIn: React.FC = () => {
           </ol>
         </AnimatedSection>
 
-        {/* Call to Action Section */}
-        <AnimatedSection className="py-12 text-center">
-          <h3 className="text-2xl font-bold">
-            Join Thousands Who’ve Taken Control of Their Finances
-          </h3>
-          <p className="mt-4 text-gray-600">
-            Whether you're saving for a big purchase, paying off debt, or simply want to spend smarter, ExpenseTracker Pro is your ultimate financial partner.
-          </p>
-          <div className="mt-8 flex flex-col md:flex-row justify-center gap-4">
-            <Link to={"/sign-in"}>
-              <motion.button
-                className="bg-blue-600 w-full text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition duration-300"
-                whileHover={{ scale: 1.05 }}
-              >
-                Log In
-              </motion.button>
-            </Link>
-            <Link to={"/sign-up"}>
-              <motion.button
-                className="bg-gray-100 w-full text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-blue-200 transition duration-300 border border-blue-600"
-                whileHover={{ scale: 1.05 }}
-              >
-                Sign Up
-              </motion.button>
-            </Link>
-          </div>
-        </AnimatedSection>
+        
       </div>
     </div>
   );

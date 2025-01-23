@@ -4,6 +4,7 @@ import { doc, getDoc, setDoc } from 'firebase/firestore';
 import { db } from "../../firebase"
 import { useNavigate } from "react-router";
 import { getUserEmail, getDisplayName, getPhotoUrl, clearUserEmail, clearPhotoUrl, clearDisplayName } from "../../utils/authStorage";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "../ui/tooltip";
 
 function Navbar() {
   const user = getUserEmail()
@@ -83,13 +84,22 @@ function Navbar() {
   }, [user])
 
   return (
+    <>
     <nav className="bg-gray-800 p-5 text-white flex justify-between items-center">
       {user ? <Sidebar/>: <h1 className="text-2xl font-bold flex-[0.5]">Expense Tracker</h1>}
       {user && (<h1 className="text-lg font-semibold">{displayName}'s Financial Report</h1>)}
-      <div className="rounded-full">
-        <img className="rounded-full h-10 w-10" src={photoUrl} onClick={handleLogout} alt="user's photo icon"/>
+      <div className="rounded-full hover:cursor-pointer" onClick={handleLogout}>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger><img className="rounded-full h-10 w-10" src={photoUrl === "" ? "./default.jpg" : photoUrl} alt="user's photo icon"/></TooltipTrigger>
+            <TooltipContent>
+              <p className="text-lg">Logout</p>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
       </div>
     </nav>
+    </>
   )
 }
 
